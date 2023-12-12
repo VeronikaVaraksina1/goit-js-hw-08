@@ -97,17 +97,17 @@ gallery.addEventListener("click", (event) => {
       </div>`,
       {
         onShow: () => {
-          document.addEventListener("keydown", removeListener);
+          document.addEventListener("keydown", onRemoveListener);
         },
         onClose: () => {
-          document.removeEventListener("keydown", removeListener);
+          document.removeEventListener("keydown", onRemoveListener);
         },
       }
     );
 
     instance.show();
 
-    function removeListener(event) {
+    function onRemoveListener(event) {
       if (event.code === "Escape") {
         instance.close();
       }
