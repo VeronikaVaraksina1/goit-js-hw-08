@@ -68,6 +68,24 @@ const images = [
 
 const gallery = document.querySelector(".gallery");
 
+const instance = basicLightbox.create(
+  `<img class="large-image" src="" width="1112" height="640">`,
+  {
+    onShow: () => {
+      document.addEventListener("keydown", onRemoveListener);
+    },
+    onClose: () => {
+      document.removeEventListener("keydown", onRemoveListener);
+    },
+  }
+);
+
+function onRemoveListener(event) {
+  if (event.key === "Escape") {
+    instance.close();
+  }
+}
+
 gallery.innerHTML = images.reduce(
   (acc, item) =>
     acc +
@@ -90,27 +108,10 @@ gallery.addEventListener("click", (event) => {
 
   if (event.target.nodeName !== "IMG") {
     return;
-  } else {
-    const instance = basicLightbox.create(
-      `<div>
-        <img class="big-gallery-image" src="${event.target.dataset.source}" width="1112" height="640">
-      </div>`,
-      {
-        onShow: () => {
-          document.addEventListener("keydown", onRemoveListener);
-        },
-        onClose: () => {
-          document.removeEventListener("keydown", onRemoveListener);
-        },
-      }
-    );
-
-    instance.show();
-
-    function onRemoveListener(event) {
-      if (event.code === "Escape") {
-        instance.close();
-      }
-    }
   }
+
+  const instanceImg = instance.element().querySelector(".large-image");
+  instanceImg.src = event.target.dataset.source;
+
+  instance.show();
 });
